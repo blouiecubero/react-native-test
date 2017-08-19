@@ -14,12 +14,15 @@ module.exports = function(req,res) {
 
 		 	twilio.messages.create({
 		 		body: 'Your code is:' + code,
-		 		to: phone, 
+		 		to: '+63' + phone, 
 		 		from: '+15103451420'
 		 	}, (err) => {
 		 		if (err) { return res.status(500).send(err); }
 
 		 		admin.database().ref('users/' + phone)
+		 			.update({ code: code, codeValid: true }, () => {
+		 				res.send({ success: true })			
+		 			})
 		 	})
 		 })
 		 .catch((err) => {
